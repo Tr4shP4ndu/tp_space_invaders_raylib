@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include "spaceship.hpp"
+#include "game.hpp"
 
 int main()
 {
@@ -9,12 +9,13 @@ int main()
     InitWindow(screenWidth, screenHeight, "My first RAYLIB program!");
     SetTargetFPS(60);
 
-    Spaceship spaceship;
+    Game game;
+
     while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(grey);
-        spaceship.Draw();
+        game.Draw();
         EndDrawing();
     }
     CloseWindow();
