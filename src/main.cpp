@@ -13,8 +13,8 @@ int main()
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        spaceship.Draw();
         ClearBackground(grey);
+        spaceship.Draw();
         EndDrawing();
     }
     CloseWindow();

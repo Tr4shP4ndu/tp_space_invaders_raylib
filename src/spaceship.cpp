@@ -3,8 +3,8 @@
 Spaceship::Spaceship()
 {
     image = LoadTexture("resources/spaceship.png");
-    position.x = 100;
-    position.y = 100;
+    position.x = (GetScreenWidth() - image.width) / 2; //Screen calculation by middle of the screen x axis
+    position.y = (GetScreenHeight() - image.height); //Screen calculation by middle of the screen y axis
 
 }
 
