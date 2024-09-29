@@ -11,3 +11,8 @@ void Laser::Draw()
 {
   DrawRectangle(position.x, position.y, 4, 15, {243, 216, 63, 255});
 }
+
+void Laser::Update()
+{
+  position.y += speed;
+}

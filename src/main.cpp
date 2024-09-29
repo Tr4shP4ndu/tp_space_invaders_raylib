@@ -16,6 +16,7 @@ int main()
     while (!WindowShouldClose())
     {
         BeginDrawing();
+        laser.Update();
         ClearBackground(grey);
         game.Draw();
         game.HandleInput();
