@@ -3,7 +3,7 @@
 
 int main()
 {
-    // Color darkGreen = Color{20, 160, 133, 255};
+    Color grey = Color{29, 29, 27, 255};
     const int screenWidth = 800;
     const int screenHeight = 600;
     InitWindow(screenWidth, screenHeight, "My first RAYLIB program!");
@@ -14,7 +14,7 @@ int main()
     {
         BeginDrawing();
         spaceship.Draw();
-        // ClearBackground(darkGreen);
+        ClearBackground(grey);
         EndDrawing();
     }
     CloseWindow();
