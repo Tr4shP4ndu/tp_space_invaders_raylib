@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include "game.hpp"
+#include "alien.hpp"
 
 
 int main()
@@ -11,6 +12,7 @@ int main()
     SetTargetFPS(60);
 
     Game game;
+    Alien alien = Alien(3, {100, 100});
 
     while (!WindowShouldClose())
     {
@@ -19,6 +21,7 @@ int main()
         game.Update();
         game.Draw();
         game.HandleInput();
+        alien.Draw();
         EndDrawing();
     }
     CloseWindow();
