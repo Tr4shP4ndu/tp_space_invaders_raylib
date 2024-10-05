@@ -201,5 +201,21 @@ void Game::CheckForCollisions()
         ++it;
       }
     }
+    for(auto& obstacle: obstacles)
+    {
+      auto it = obstacle.blocks.begin();
+      while(it != obstacle.blocks.end())
+      {
+        if(CheckCollisionRecs(it -> getRect(), laser.getRect()))
+        {
+          it = obstacle.blocks.erase(it);
+          laser.active = false;
+        }
+        else
+        {
+          ++it;
+        }
+      }
+    }
   }
 }
