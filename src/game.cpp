@@ -6,6 +6,7 @@ Game::Game()
   obstacles = CreateObstacles();
   aliens = CreateAliens();
   aliensDirection = 1;
+  timeLastAlienFired = 0.0;
 }
 
 Game::~Game()
@@ -67,6 +68,17 @@ void Game::DeleteInactiveLasers()
     if(!it -> active)
     {
       it = spaceship.lasers.erase(it); // The erase method returns a new iterator pointing to the correct element on the vector.
+    }
+    else
+    {
+      ++ it; 
+    }
+  }
+  for(auto it = alienLasers.begin(); it != alienLasers.end();)  // Creating an interator named it, loop through the vector, when inactive l;aser we remove it from vector
+  {
+    if(!it -> active)
+    {
+      it = alienLasers.erase(it); // The erase method returns a new iterator pointing to the correct element on the vector.
     }
     else
     {
@@ -145,8 +157,14 @@ void Game::MoveDownAliens(int distance)
 
 void Game::AlienShootLaser()
 {
-  int randomIndex = GetRandomValue(0, aliens.size() - 1);
-  Alien& alien = aliens[randomIndex];
-  alienLasers.push_back(Laser({alien.position.x + alien.alienImages[alien.type - 1].width / 2, 
-                              alien.position.y + alien.alienImages[alien.type - 1].height}, 6));
+  double currentTime = GetTime();
+  if(currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty())
+  {
+    int randomIndex = GetRandomValue(0, aliens.size() - 1);
+    Alien& alien = aliens[randomIndex];
+    alienLasers.push_back(Laser({alien.position.x + alien.alienImages[alien.type - 1].width / 2, 
+                                alien.position.y + alien.alienImages[alien.type - 1].height}, 6));
+    timeLastAlienFired = GetTime();
+  }
+  
 }
