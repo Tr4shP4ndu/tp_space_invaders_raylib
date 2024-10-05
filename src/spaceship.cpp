@@ -42,3 +42,8 @@ void Spaceship::FireLaser()
   }
   
 }
+
+Rectangle Spaceship::getRect()
+{
+  return {position.x, position.y, float(image.width), float(image.height)};
+}

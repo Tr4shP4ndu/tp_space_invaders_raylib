@@ -10,6 +10,7 @@
     int GetType();
     static void UnloadImages();
     static Texture2D alienImages[3];
+    Rectangle getRect();
     int type;
     Vector2 position;
   private:

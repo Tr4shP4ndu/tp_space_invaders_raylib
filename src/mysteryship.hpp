@@ -9,6 +9,7 @@ class MysteryShip
     void Update();
     void Spawn();
     void Draw();
+    Rectangle getRect();
     bool alive;
   private:
     Vector2 position;
