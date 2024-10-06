@@ -9,6 +9,8 @@ Game::Game()
   timeLastAlienFired = 0.0;
   timeLastSpawn = 0.0;
   mysteryShipSpawnInterval = GetRandomValue(10, 20);
+  lives = 3;
+  run = true;
 }
 
 Game::~Game()
@@ -17,28 +19,30 @@ Game::~Game()
 }
 
 void Game::Update(){
-
-  double currentTime = GetTime();
-  if(currentTime - timeLastSpawn > mysteryShipSpawnInterval)
+  if(run)
   {
-    mysteryship.Spawn();
-    timeLastSpawn = GetTime();
-    mysteryShipSpawnInterval = GetRandomValue(10, 20);
+    double currentTime = GetTime();
+    if(currentTime - timeLastSpawn > mysteryShipSpawnInterval)
+    {
+      mysteryship.Spawn();
+      timeLastSpawn = GetTime();
+      mysteryShipSpawnInterval = GetRandomValue(10, 20);
+    }
+    for(auto& laser: spaceship.lasers)
+    {
+      laser.Update();
+    }
+    MoveAliens();
+    AlienShootLaser();
+    for(auto& laser: alienLasers)
+    {
+      laser.Update();
+    }
+    DeleteInactiveLasers();
+    // std::cout << "Vector Size: " << spaceship.lasers.size() << std::endl;
+    mysteryship.Update();
+    CheckForCollisions();
   }
-  for(auto& laser: spaceship.lasers)
-  {
-    laser.Update();
-  }
-  MoveAliens();
-  AlienShootLaser();
-  for(auto& laser: alienLasers)
-  {
-    laser.Update();
-  }
-  DeleteInactiveLasers();
-  // std::cout << "Vector Size: " << spaceship.lasers.size() << std::endl;
-  mysteryship.Update();
-  CheckForCollisions();
 }
 
 void Game::Draw()
@@ -65,12 +69,15 @@ void Game::Draw()
 
 void Game::HandleInput()
 {
-  if(IsKeyDown(KEY_LEFT)) {
-      spaceship.MoveLeft();
-  } else if (IsKeyDown(KEY_RIGHT)){
-      spaceship.MoveRight();
-  } else if (IsKeyDown(KEY_SPACE)) {
-    spaceship.FireLaser();
+  if(run)
+  {
+    if(IsKeyDown(KEY_LEFT)) {
+        spaceship.MoveLeft();
+    } else if (IsKeyDown(KEY_RIGHT)){
+        spaceship.MoveRight();
+    } else if (IsKeyDown(KEY_SPACE)) {
+      spaceship.FireLaser();
+    }
   }
 }
 
@@ -229,7 +236,11 @@ void Game::CheckForCollisions()
     if(CheckCollisionRecs(laser.getRect(), spaceship.getRect()))
     {
       laser.active = false;
-      std::cout << "Spaceshit Hit " << std::endl;
+      lives --;
+      if(lives == 0)
+      {
+        GameOver();
+      }
     }
     for(auto& obstacle: obstacles)
     {
@@ -269,7 +280,12 @@ void Game::CheckForCollisions()
     }
     if(CheckCollisionRecs(alien.getRect(), spaceship.getRect()))
     {
-      std::cout << "Spaceshit hit by Alien" << std::endl;
+      GameOver();
     }
   }
+}
+
+void Game::GameOver()
+{
+  run = false;
 }
