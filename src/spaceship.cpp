@@ -3,19 +3,18 @@
 Spaceship::Spaceship()
 {
     image = LoadTexture("resources/spaceship.png");
-    position.x = (GetScreenWidth() - image.width) / 2; //Screen calculation by middle of the screen x axis
-    position.y = (GetScreenHeight() - image.height); //Screen calculation by middle of the screen y axis
+    position.x = (GetScreenWidth() - image.width)/2;
+    position.y = GetScreenHeight() - image.height - 100;
     lastFireTime = 0.0;
-
+    laserSound = LoadSound("sounds/laser.ogg");
 }
 
 Spaceship::~Spaceship() {
     UnloadTexture(image);
+    UnloadSound(laserSound);
 }
 
-
-void Spaceship::Draw() 
-{
+void Spaceship::Draw() {
     DrawTextureV(image, position, WHITE);
 }
 
@@ -35,15 +34,21 @@ void Spaceship::MoveRight() {
 
 void Spaceship::FireLaser()
 {
-  if(GetTime() - lastFireTime >= 0.35)
-  {
-    lasers.push_back(Laser({position.x + image.width / 2 - 2,position.y}, - 6));
-    lastFireTime = GetTime();
-  }
-  
+    if(GetTime() - lastFireTime >= 0.35) {
+        lasers.push_back(Laser({position.x + image.width/2 - 2,position.y},-6));
+        lastFireTime = GetTime();
+        PlaySound(laserSound);
+    }
 }
 
 Rectangle Spaceship::getRect()
 {
-  return {position.x, position.y, float(image.width), float(image.height)};
+    return {position.x, position.y, float(image.width), float(image.height)};
+}
+
+void Spaceship::Reset()
+{
+    position.x = (GetScreenWidth() - image.width)/ 2.0f;
+    position.y = GetScreenHeight() - image.height - 100;
+    lasers.clear();
 }
