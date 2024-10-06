@@ -3,15 +3,15 @@
 
 class MysteryShip {
     public:
-        MysteryShip();
-        ~MysteryShip();
-        void Update();
-        void Draw();
-        void Spawn();
-        Rectangle getRect();
-        bool alive;
+        MysteryShip();        // Constructor
+        ~MysteryShip();       // Destructor
+        void Update();        // Update ship position
+        void Draw();          // Draw the ship
+        void Spawn();         // Spawn the ship at random side
+        Rectangle getRect();  // Get ship hitbox
+        bool alive;           // Ship state (alive or not)
     private:
-        Vector2 position;
-        Texture2D image;
-        int speed;
+        Vector2 position;     // Ship position
+        Texture2D image;      // Ship texture
+        int speed;            // Ship movement speed
 };

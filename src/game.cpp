@@ -2,162 +2,181 @@
 #include <iostream>
 #include <fstream>
 
-Game::Game()
-{
-    music = LoadMusicStream("sounds/music.ogg");
-    explosionSound = LoadSound("sounds/explosion.ogg");
-    PlayMusicStream(music);
-    InitGame();
+// Constructor implementation
+Game::Game() {
+    music = LoadMusicStream("sounds/music.ogg"); // Load background music
+    explosionSound = LoadSound("sounds/explosion.ogg"); // Load explosion sound
+    PlayMusicStream(music); // Start playing music
+    InitGame(); // Initialize game elements
 }
 
+// Destructor implementation
 Game::~Game() {
-    Alien::UnloadImages();
-    UnloadMusicStream(music);
-    UnloadSound(explosionSound);
+    Alien::UnloadImages(); // Unload alien images
+    UnloadMusicStream(music); // Unload background music
+    UnloadSound(explosionSound); // Unload explosion sound
 }
 
+// Update game state
 void Game::Update() {
-    if(run) {
-
-        double currentTime = GetTime();
-        if(currentTime - timeLastSpawn > mysteryShipSpawnInterval) {
-            mysteryship.Spawn();
-            timeLastSpawn = GetTime();
-            mysteryShipSpawnInterval = GetRandomValue(10, 20);
-        }
-
-        for(auto& laser: spaceship.lasers) {
-            laser.Update();
-        }
-
-        MoveAliens();
-
-        AlienShootLaser();
-
-        for(auto& laser: alienLasers) {
-            laser.Update();
-        }
-
-        DeleteInactiveLasers();
+    if (run) {
+        double currentTime = GetTime(); // Get the current time
         
-        mysteryship.Update();
+        // Spawn mystery ship if the time interval has passed
+        if (currentTime - timeLastSpawn > mysteryShipSpawnInterval) {
+            mysteryship.Spawn(); // Spawn the mystery ship
+            timeLastSpawn = GetTime(); // Reset last spawn time
+            mysteryShipSpawnInterval = GetRandomValue(10, 20); // Randomize next spawn interval
+        }
 
-        CheckForCollisions();
+        // Update lasers fired by the spaceship
+        for (auto& laser : spaceship.lasers) {
+            laser.Update();
+        }
+
+        MoveAliens(); // Update aliens' positions
+        AlienShootLaser(); // Allow aliens to shoot lasers
+
+        // Update lasers shot by aliens
+        for (auto& laser : alienLasers) {
+            laser.Update();
+        }
+
+        DeleteInactiveLasers(); // Remove inactive lasers
+        mysteryship.Update(); // Update mystery ship state
+        CheckForCollisions(); // Check for collisions
     } else {
-        if(IsKeyDown(KEY_ENTER)){
+        // Reset the game if the ENTER key is pressed
+        if (IsKeyDown(KEY_ENTER)) {
             Reset();
             InitGame();
         }
     }
 }
 
+// Draw game elements
 void Game::Draw() {
-    spaceship.Draw();
+    spaceship.Draw(); // Draw the spaceship
 
-    for(auto& laser: spaceship.lasers) {
+    // Draw lasers fired by the spaceship
+    for (auto& laser : spaceship.lasers) {
         laser.Draw();
     }
 
-    for(auto& obstacle: obstacles) {
+    // Draw obstacles
+    for (auto& obstacle : obstacles) {
         obstacle.Draw();
     }
 
-    for(auto& alien: aliens) {
+    // Draw aliens
+    for (auto& alien : aliens) {
         alien.Draw();
     }
 
-    for(auto& laser: alienLasers) {
+    // Draw lasers fired by aliens
+    for (auto& laser : alienLasers) {
         laser.Draw();
     }
 
-    mysteryship.Draw();
+    mysteryship.Draw(); // Draw mystery ship
 }
 
+// Handle user input
 void Game::HandleInput() {
-    if(run){
-        if(IsKeyDown(KEY_LEFT)) {
+    if (run) {
+        // Move spaceship left or right based on key input
+        if (IsKeyDown(KEY_LEFT)) {
             spaceship.MoveLeft();
-        } else if (IsKeyDown(KEY_RIGHT)){
+        } else if (IsKeyDown(KEY_RIGHT)) {
             spaceship.MoveRight();
         } else if (IsKeyDown(KEY_SPACE)) {
-            spaceship.FireLaser();
+            spaceship.FireLaser(); // Fire laser if SPACE is pressed
         }
     }
 }
 
-void Game::DeleteInactiveLasers()
-{
-    for(auto it = spaceship.lasers.begin(); it != spaceship.lasers.end();){
-        if(!it -> active) {
-            it = spaceship.lasers.erase(it);
+// Remove inactive lasers from both spaceship and alien lists
+void Game::DeleteInactiveLasers() {
+    // Remove inactive lasers from the spaceship
+    for (auto it = spaceship.lasers.begin(); it != spaceship.lasers.end();) {
+        if (!it->active) {
+            it = spaceship.lasers.erase(it); // Erase inactive laser
         } else {
-            ++ it;
+            ++it; // Move to the next laser
         }
     }
 
-    for(auto it = alienLasers.begin(); it != alienLasers.end();){
-        if(!it -> active) {
-            it = alienLasers.erase(it);
+    // Remove inactive lasers shot by aliens
+    for (auto it = alienLasers.begin(); it != alienLasers.end();) {
+        if (!it->active) {
+            it = alienLasers.erase(it); // Erase inactive laser
         } else {
-            ++ it;
+            ++it; // Move to the next laser
         }
     }
 }
 
-std::vector<Obstacle> Game::CreateObstacles()
-{
-    int obstacleWidth = Obstacle::grid[0].size() * 3;
-    float gap = (GetScreenWidth() - (4 * obstacleWidth))/5;
+// Create obstacles and position them on the screen
+std::vector<Obstacle> Game::CreateObstacles() {
+    int obstacleWidth = Obstacle::grid[0].size() * 3; // Calculate obstacle width
+    float gap = (GetScreenWidth() - (4 * obstacleWidth)) / 5; // Calculate gap between obstacles
 
-    for(int i = 0; i < 4; i++) {
-        float offsetX = (i + 1) * gap + i * obstacleWidth;
-        obstacles.push_back(Obstacle({offsetX, float(GetScreenHeight() - 200)}));
+    // Create obstacles in a loop
+    for (int i = 0; i < 4; i++) {
+        float offsetX = (i + 1) * gap + i * obstacleWidth; // Calculate x position
+        obstacles.push_back(Obstacle({offsetX, float(GetScreenHeight() - 200)})); // Add obstacle
     }
-    return obstacles;
+    return obstacles; // Return the created obstacles
 }
 
-std::vector<Alien> Game::CreateAliens()
-{
-    std::vector<Alien> aliens;
-    for(int row = 0; row < 5; row++) {
-        for(int column = 0; column < 11; column++) {
+// Create aliens and position them in a grid
+std::vector<Alien> Game::CreateAliens() {
+    std::vector<Alien> aliens; // Vector to hold created aliens
 
-            int alienType;
-            if(row == 0) {
-                alienType = 3;
+    // Loop to create a grid of aliens
+    for (int row = 0; row < 5; row++) {
+        for (int column = 0; column < 11; column++) {
+            int alienType; // Variable to hold alien type
+            
+            // Determine alien type based on row
+            if (row == 0) {
+                alienType = 3; // Strongest aliens
             } else if (row == 1 || row == 2) {
-                alienType = 2;
+                alienType = 2; // Medium-strength aliens
             } else {
-                alienType = 1;
+                alienType = 1; // Weakest aliens
             }
 
+            // Calculate position for each alien
             float x = 75 + column * 55;
             float y = 110 + row * 55;
-            aliens.push_back(Alien(alienType, {x, y}));
+            aliens.push_back(Alien(alienType, {x, y})); // Add alien to vector
         }
     }
-    return aliens;
+    return aliens; // Return the created aliens
 }
 
+// Move aliens based on game logic
 void Game::MoveAliens() {
-    for(auto& alien: aliens) {
-        if(alien.position.x + alien.alienImages[alien.type - 1].width > GetScreenWidth() - 25) {
-            aliensDirection = -1;
-            MoveDownAliens(4);
+    for (auto& alien : aliens) {
+        // Check if aliens reach screen bounds and change direction if needed
+        if (alien.position.x + alien.alienImages[alien.type - 1].width > GetScreenWidth() - 25) {
+            aliensDirection = -1; // Change direction to left
+            MoveDownAliens(4); // Move aliens down
         }
-        if(alien.position.x < 25) {
-            aliensDirection = 1;
-            MoveDownAliens(4);
+        if (alien.position.x < 25) {
+            aliensDirection = 1; // Change direction to right
+            MoveDownAliens(4); // Move aliens down
         }
 
-        alien.Update(aliensDirection);
+        alien.Update(aliensDirection); // Update alien's position
     }
 }
 
-void Game::MoveDownAliens(int distance)
-{
-    for(auto& alien: aliens) {
-        alien.position.y += distance;
+// Move aliens downwards by a specified distance
+void Game::MoveDownAliens(int distance) {
+    for (auto& alien : aliens) {
+        alien.position.y += distance; // Move each alien down
     }
 }
 
