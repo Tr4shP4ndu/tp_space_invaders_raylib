@@ -7,11 +7,11 @@ class Spaceship {
     public:
         Spaceship();          // Constructor
         ~Spaceship();         // Destructor
-        void Draw();          // Draw the spaceship
+        void Draw() const;    // Draw the spaceship
         void MoveLeft();      // Move spaceship left
         void MoveRight();     // Move spaceship right
         void FireLaser();     // Fire a laser
-        Rectangle getRect();  // Get spaceship hitbox
+        Rectangle getRect() const;  // Get spaceship hitbox
         void Reset();         // Reset spaceship state
         std::vector<Laser> lasers;  // List of lasers fired
     private:

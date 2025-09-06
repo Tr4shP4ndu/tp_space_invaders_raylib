@@ -5,8 +5,9 @@
 // Function to format numbers with leading zeros (e.g., for score display)
 std::string FormatWithLeadingZeros(int number, int width) {
     std::string numberText = std::to_string(number);
-    int leadingZeros = width - numberText.length();
-    return numberText = std::string(leadingZeros, '0') + numberText;
+    int leadingZeros = width - static_cast<int>(numberText.length());
+    if (leadingZeros < 0) leadingZeros = 0;
+    return std::string(leadingZeros, '0') + numberText;
 }
 
 int main() {
@@ -41,7 +42,8 @@ int main() {
         ClearBackground(grey);          // Clear background to grey
 
         // Draw game area boundaries
-        DrawRectangleRoundedLines({10, 10, 780, 780}, 0.18f, 20, 2, yellow);
+        // raylib version in dist exposes 4-arg DrawRectangleRoundedLines (no thickness parameter)
+        DrawRectangleRoundedLines({10, 10, 780, 780}, 0.18f, 20, yellow);
         DrawLineEx({25, 730}, {775, 730}, 3, yellow);
 
         // If the game is running, display level information, otherwise show "GAME OVER"

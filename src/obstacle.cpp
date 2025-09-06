@@ -34,8 +34,8 @@ Obstacle::Obstacle(Vector2 position)
 }
 
 // Draws each block that makes up the obstacle
-void Obstacle::Draw() {
-    for(auto& block: blocks) {
+void Obstacle::Draw() const {
+    for(const auto& block: blocks) {
         block.Draw();
     }
 }

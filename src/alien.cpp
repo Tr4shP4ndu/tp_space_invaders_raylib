@@ -29,12 +29,12 @@ Alien::Alien(int type, Vector2 position)
 }
 
 // Draw the alien using its texture
-void Alien::Draw() {
+void Alien::Draw() const {
     DrawTextureV(alienImages[type - 1], position, WHITE); // Draw the alien at its position
 }
 
 // Get the type of the alien
-int Alien::GetType() {
+int Alien::GetType() const {
     return type; // Return the type
 }
 
@@ -47,7 +47,7 @@ void Alien::UnloadImages()
 }
 
 // Get the rectangle representing the alien's dimensions
-Rectangle Alien::getRect()
+Rectangle Alien::getRect() const
 {
     return {position.x, position.y, 
             static_cast<float>(alienImages[type - 1].width), 
@@ -57,4 +57,8 @@ Rectangle Alien::getRect()
 // Update the alien's position based on the direction
 void Alien::Update(int direction) {
     position.x += direction; // Move the alien horizontally
+}
+
+void Alien::MoveDown(float dy) {
+    position.y += dy;
 }

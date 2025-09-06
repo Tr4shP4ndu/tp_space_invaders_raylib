@@ -6,9 +6,9 @@ class MysteryShip {
         MysteryShip();        // Constructor
         ~MysteryShip();       // Destructor
         void Update();        // Update ship position
-        void Draw();          // Draw the ship
+        void Draw() const;    // Draw the ship
         void Spawn();         // Spawn the ship at random side
-        Rectangle getRect();  // Get ship hitbox
+        Rectangle getRect() const;  // Get ship hitbox
         bool alive;           // Ship state (alive or not)
     private:
         Vector2 position;     // Ship position

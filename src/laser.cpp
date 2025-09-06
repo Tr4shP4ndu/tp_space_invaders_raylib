@@ -9,13 +9,13 @@ Laser::Laser(Vector2 position, int speed) {
 }
 
 // Draw the laser on the screen
-void Laser::Draw() {
+void Laser::Draw() const {
     if (active) // Only draw if the laser is active
         DrawRectangle(position.x, position.y, 4, 15, {243, 216, 63, 255}); // Draw the laser as a rectangle
 }
 
 // Returns the rectangle that represents the laser
-Rectangle Laser::getRect() {
+Rectangle Laser::getRect() const {
     Rectangle rect;           // Create a rectangle instance
     rect.x = position.x;     // Set the x position
     rect.y = position.y;     // Set the y position

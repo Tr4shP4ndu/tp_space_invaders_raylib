@@ -59,22 +59,22 @@ void Game::Draw() {
     spaceship.Draw(); // Draw the spaceship
 
     // Draw lasers fired by the spaceship
-    for (auto& laser : spaceship.lasers) {
+    for (const auto& laser : spaceship.lasers) {
         laser.Draw();
     }
 
     // Draw obstacles
-    for (auto& obstacle : obstacles) {
+    for (const auto& obstacle : obstacles) {
         obstacle.Draw();
     }
 
     // Draw aliens
-    for (auto& alien : aliens) {
+    for (const auto& alien : aliens) {
         alien.Draw();
     }
 
     // Draw lasers fired by aliens
-    for (auto& laser : alienLasers) {
+    for (const auto& laser : alienLasers) {
         laser.Draw();
     }
 
@@ -158,25 +158,26 @@ std::vector<Alien> Game::CreateAliens() {
 
 // Move aliens based on game logic
 void Game::MoveAliens() {
+    constexpr float kMargin = 25.0f;
+    constexpr float kStepDown = 4.0f;
     for (auto& alien : aliens) {
-        // Check if aliens reach screen bounds and change direction if needed
-        if (alien.position.x + alien.alienImages[alien.type - 1].width > GetScreenWidth() - 25) {
-            aliensDirection = -1; // Change direction to left
-            MoveDownAliens(4); // Move aliens down
+        Rectangle r = alien.getRect();
+        if (r.x + r.width > GetScreenWidth() - kMargin) {
+            aliensDirection = -1;
+            MoveDownAliens(static_cast<int>(kStepDown));
         }
-        if (alien.position.x < 25) {
-            aliensDirection = 1; // Change direction to right
-            MoveDownAliens(4); // Move aliens down
+        if (r.x < kMargin) {
+            aliensDirection = 1;
+            MoveDownAliens(static_cast<int>(kStepDown));
         }
-
-        alien.Update(aliensDirection); // Update alien's position
+        alien.Update(aliensDirection);
     }
 }
 
 // Move aliens downwards by a specified distance
 void Game::MoveDownAliens(int distance) {
     for (auto& alien : aliens) {
-        alien.position.y += distance; // Move each alien down
+        alien.MoveDown(static_cast<float>(distance));
     }
 }
 
@@ -184,10 +185,10 @@ void Game::AlienShootLaser()
 {
     double currentTime = GetTime();
     if(currentTime - timeLastAlienFired >= alienLaserShootInterval && !aliens.empty()) {
-        int randomIndex = GetRandomValue(0, aliens.size() - 1);
+        int randomIndex = GetRandomValue(0, static_cast<int>(aliens.size() - 1));
         Alien& alien = aliens[randomIndex];
-        alienLasers.push_back(Laser({alien.position.x + alien.alienImages[alien.type -1].width/2, 
-                                    alien.position.y + alien.alienImages[alien.type - 1].height}, 6));
+        Rectangle ar = alien.getRect();
+        alienLasers.push_back(Laser({ar.x + ar.width/2.0f, ar.y + ar.height}, 6));
         timeLastAlienFired = GetTime();
     }
 }
@@ -202,11 +203,11 @@ void Game::CheckForCollisions()
             if(CheckCollisionRecs(it -> getRect(), laser.getRect()))
             {
                 PlaySound(explosionSound);
-                if(it -> type == 1) {
+                if(it -> GetType() == 1) {
                     score += 100;
-                } else if (it -> type == 2) {
+                } else if (it -> GetType() == 2) {
                     score += 200;
-                } else if(it -> type == 3) {
+                } else if(it -> GetType() == 3) {
                     score += 300;
                 }
                 checkForHighscore();

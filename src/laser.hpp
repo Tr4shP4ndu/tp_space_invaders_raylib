@@ -11,10 +11,10 @@ public:
     void Update();
     
     // Draws the laser on the screen
-    void Draw();
+    void Draw() const;
     
     // Returns the rectangle representing the laser's position and size
-    Rectangle getRect();
+    Rectangle getRect() const;
 
     bool active; // Indicates if the laser is currently active
 

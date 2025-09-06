@@ -11,20 +11,22 @@ public:
     void Update(int direction);
 
     // Method to draw the alien on the screen
-    void Draw();
+    void Draw() const;
 
     // Method to get the type of the alien
-    int GetType();
+    int GetType() const;
 
     // Method to unload the alien images from memory
     static void UnloadImages();
 
     // Method to get the rectangle representing the alien's dimensions
-    Rectangle getRect();
+    Rectangle getRect() const;
+
+    void MoveDown(float dy);
 
     static Texture2D alienImages[3]; // Array to hold alien textures
-    int type;                          // Type of the alien
-    Vector2 position;                  // Position of the alien
 
 private:
+    int type;                        // Type of the alien
+    Vector2 position;                // Position of the alien
 };

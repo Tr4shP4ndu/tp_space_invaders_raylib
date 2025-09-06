@@ -41,10 +41,10 @@ private:
     std::vector<Alien> aliens; // List of aliens
     int aliensDirection; // Direction in which aliens are moving
     std::vector<Laser> alienLasers; // List of lasers shot by aliens
-    constexpr static float alienLaserShootInterval = 0.35; // Interval for alien laser shooting
-    float timeLastAlienFired; // Last time an alien fired a laser
+    constexpr static double alienLaserShootInterval = 0.35; // Interval for alien laser shooting
+    double timeLastAlienFired; // Last time an alien fired a laser
     MysteryShip mysteryship; // Mystery ship instance
-    float mysteryShipSpawnInterval; // Interval for spawning mystery ship
-    float timeLastSpawn; // Last time a mystery ship was spawned
+    double mysteryShipSpawnInterval; // Interval for spawning mystery ship
+    double timeLastSpawn; // Last time a mystery ship was spawned
     Sound explosionSound; // Sound effect for explosions
 };

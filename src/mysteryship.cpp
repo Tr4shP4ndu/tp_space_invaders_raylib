@@ -28,7 +28,7 @@ void MysteryShip::Spawn() {
 }
 
 // Returns the rectangle (hitbox) of the mystery ship if it's alive, otherwise returns an empty rectangle
-Rectangle MysteryShip::getRect()
+Rectangle MysteryShip::getRect() const
 {
     if(alive){
         return {position.x, position.y, float(image.width), float(image.height)};
@@ -48,7 +48,7 @@ void MysteryShip::Update() {
 }
 
 // Draws the mystery ship if it's alive
-void MysteryShip::Draw() {
+void MysteryShip::Draw() const {
     if(alive) {
         DrawTextureV(image, position, WHITE);
     }

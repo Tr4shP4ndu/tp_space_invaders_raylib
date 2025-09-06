@@ -7,12 +7,12 @@ Block::Block(Vector2 position)
 }
 
 // Draw the block using a specific color
-void Block::Draw() {
+void Block::Draw() const {
     DrawRectangle(position.x, position.y, 3, 3, {243, 216, 63, 255}); // Draw a yellow block
 }
 
 // Get the rectangle representing the block's dimensions
-Rectangle Block::getRect()
+Rectangle Block::getRect() const
 {
     Rectangle rect;
     rect.x = position.x; // X coordinate

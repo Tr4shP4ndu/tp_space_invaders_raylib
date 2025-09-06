@@ -8,10 +8,10 @@ public:
     Block(Vector2 position);
 
     // Method to draw the block on the screen
-    void Draw();
+    void Draw() const;
 
     // Method to get the rectangle representing the block's dimensions
-    Rectangle getRect();
+    Rectangle getRect() const;
 
 private:
     Vector2 position; // Position of the block

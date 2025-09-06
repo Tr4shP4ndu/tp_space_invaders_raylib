@@ -17,7 +17,7 @@ Spaceship::~Spaceship() {
 }
 
 // Draws the spaceship
-void Spaceship::Draw() {
+void Spaceship::Draw() const {
     DrawTextureV(image, position, WHITE);
 }
 
@@ -48,7 +48,7 @@ void Spaceship::FireLaser()
 }
 
 // Returns the rectangle (hitbox) of the spaceship
-Rectangle Spaceship::getRect()
+Rectangle Spaceship::getRect() const
 {
     return {position.x, position.y, float(image.width), float(image.height)};
 }
